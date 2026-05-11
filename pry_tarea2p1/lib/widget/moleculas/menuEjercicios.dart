@@ -8,14 +8,16 @@ class MenuEjercicios extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        PrimaryButton(
-          text: 'Problema 1',
+        CustomButton(
+          label: 'Problema 1',
           onPressed: () => Navigator.pushNamed(context, '/problema1'),
+          backgroundColor: Colors.blue,
         ),
         const SizedBox(height: 10),
-        PrimaryButton(
-          text: 'Problema 2',
+        CustomButton(
+          label: 'Problema 2',
           onPressed: () => Navigator.pushNamed(context, '/problema2'),
+          backgroundColor: Colors.green,
         ),
         
       ],
