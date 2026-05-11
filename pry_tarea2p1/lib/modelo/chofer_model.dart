@@ -2,7 +2,7 @@ class Chofer {
   final int id;
   String nombre;
   double sueldoPorHora;
-  Map<String, double> horasPorDia; // lunes, martes, miércoles, etc.
+  Map<String, double> horasPorDia; 
 
   Chofer({
     required this.id,

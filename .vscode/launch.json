@@ -1,0 +1,28 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "pry_tarea2p1",
+            "cwd": "pry_tarea2p1",
+            "request": "launch",
+            "type": "dart"
+        },
+        {
+            "name": "pry_tarea2p1 (profile mode)",
+            "cwd": "pry_tarea2p1",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "profile"
+        },
+        {
+            "name": "pry_tarea2p1 (release mode)",
+            "cwd": "pry_tarea2p1",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "release"
+        }
+    ]
+}

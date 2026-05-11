@@ -67,7 +67,7 @@ class _FormularioChofersState extends State<FormularioChofer> {
         horas,
       );
 
-      // Limpiar formulario
+      
       _nombreController.clear();
       _sueldoController.clear();
       for (var dia in _diasSemana) {
