@@ -82,6 +82,34 @@ class TarjetaChofer extends StatelessWidget {
                       ),
                     ],
                   ),
+                  const SizedBox(height: 4),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Text('Recibe Bono:'),
+                      Text(
+                        chofer.tieneBono ? 'Sí' : 'No',
+                        style: TextStyle(
+                          fontWeight: FontWeight.w500,
+                          color: chofer.tieneBono ? Colors.green : Colors.red,
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 4),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Text('Horario:'),
+                      Text(
+                        chofer.horario == 'mañana' ? 'Mañana' : 'Noche',
+                        style: const TextStyle(
+                          fontWeight: FontWeight.w500,
+                          color: Colors.blue,
+                        ),
+                      ),
+                    ],
+                  ),
                 ],
               ),
             ),

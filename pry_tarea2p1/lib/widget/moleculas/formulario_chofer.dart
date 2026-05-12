@@ -3,15 +3,16 @@ import '../atomos/text_field.dart';
 import '../atomos/texto.dart';
 import '../atomos/botonPrimario.dart';
 import '../atomos/inputDecimal.dart';
-import '../atomos/inputNumero.dart';
 
 class FormularioChofer extends StatefulWidget {
-  final Function(String nombre, double sueldoPorHora, Map<String, double> horasPorDia) onGuardar;
+  final Function(String nombre, double sueldoPorHora, Map<String, double> horasPorDia, bool tieneBono, String horario) onGuardar;
+  final VoidCallback onCancelar;
   final bool esEdicion;
 
   const FormularioChofer({
     Key? key,
     required this.onGuardar,
+    required this.onCancelar,
     this.esEdicion = false,
   }) : super(key: key);
 
@@ -31,7 +32,6 @@ class _FormularioChofersState extends State<FormularioChofer> {
     'jueves': TextEditingController(text: '0'),
     'viernes': TextEditingController(text: '0'),
     'sabado': TextEditingController(text: '0'),
-    'domingo': TextEditingController(text: '0'),
   };
 
   final List<String> _diasSemana = [
@@ -40,9 +40,11 @@ class _FormularioChofersState extends State<FormularioChofer> {
     'miercoles',
     'jueves',
     'viernes',
-    'sabado',
-    'domingo'
+    'sabado'
   ];
+
+  bool _tieneBono = false;
+  String _horario = 'mañana';
 
   @override
   void dispose() {
@@ -65,15 +67,19 @@ class _FormularioChofersState extends State<FormularioChofer> {
         _nombreController.text,
         double.parse(_sueldoController.text),
         horas,
+        _tieneBono,
+        _horario,
       );
 
-      
       _nombreController.clear();
       _sueldoController.clear();
       for (var dia in _diasSemana) {
         _horasControllers[dia]?.text = '0';
       }
-      setState(() {});
+      setState(() {
+        _tieneBono = false;
+        _horario = 'mañana';
+      });
 
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
@@ -84,6 +90,24 @@ class _FormularioChofersState extends State<FormularioChofer> {
         ),
       );
     }
+  }
+
+  void _limpiar() {
+    _nombreController.clear();
+    _sueldoController.clear();
+    for (var dia in _diasSemana) {
+      _horasControllers[dia]?.text = '0';
+    }
+    setState(() {
+      _tieneBono = false;
+      _horario = 'mañana';
+    });
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(
+        content: Text('Formulario limpiado'),
+        duration: Duration(seconds: 2),
+      ),
+    );
   }
 
   @override
@@ -143,9 +167,27 @@ class _FormularioChofersState extends State<FormularioChofer> {
                     ),
                     Expanded(
                       flex: 3,
-                      child: InputNumber(
-                        text: '0.0',
+                      child: TextFormField(
                         controller: _horasControllers[dia]!,
+                        keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                        decoration: InputDecoration(
+                          border: const OutlineInputBorder(),
+                          labelText: 'Horas',
+                          hintText: '0',
+                        ),
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Requerido';
+                          }
+                          final horas = double.tryParse(value);
+                          if (horas == null) {
+                            return 'Debe ser un número';
+                          }
+                          if (horas < 0 || horas > 12) {
+                            return 'Entre 0 y 12';
+                          }
+                          return null;
+                        },
                       ),
                     ),
                     const SizedBox(width: 8),
@@ -162,13 +204,98 @@ class _FormularioChofersState extends State<FormularioChofer> {
             },
           ),
           const SizedBox(height: 24),
-          Center(
-            child: CustomButton(
-              label: widget.esEdicion ? 'Actualizar' : 'Registrar Chofer',
-              onPressed: _guardar,
-              backgroundColor: Colors.green,
-              icon: Icons.save,
-            ),
+          const LabelText(
+            text: 'Opciones Adicionales',
+            fontSize: 16,
+            fontWeight: FontWeight.bold,
+          ),
+          const SizedBox(height: 12),
+          Row(
+            children: [
+              Checkbox(
+                value: _tieneBono,
+                onChanged: (value) {
+                  setState(() {
+                    _tieneBono = value ?? false;
+                  });
+                },
+              ),
+              const Text('Recibe Bono'),
+            ],
+          ),
+          const SizedBox(height: 12),
+          const LabelText(
+            text: 'Horario de Trabajo',
+            fontSize: 14,
+            fontWeight: FontWeight.w500,
+          ),
+          const SizedBox(height: 8),
+          Row(
+            children: [
+              Expanded(
+                child: RadioListTile<String>(
+                  title: const Text('Mañana'),
+                  value: 'mañana',
+                  groupValue: _horario,
+                  onChanged: (value) {
+                    setState(() {
+                      _horario = value ?? 'mañana';
+                    });
+                  },
+                ),
+              ),
+              Expanded(
+                child: RadioListTile<String>(
+                  title: const Text('Noche'),
+                  value: 'noche',
+                  groupValue: _horario,
+                  onChanged: (value) {
+                    setState(() {
+                      _horario = value ?? 'mañana';
+                    });
+                  },
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 24),
+          Column(
+            children: [
+              Row(
+                children: [
+                  Expanded(
+                    child: CustomButton(
+                      label: widget.esEdicion ? 'Actualizar' : 'Registrar Chofer',
+                      onPressed: _guardar,
+                      backgroundColor: Colors.green,
+                      icon: Icons.save,
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 12),
+              Row(
+                children: [
+                  Expanded(
+                    child: CustomButton(
+                      label: 'Limpiar',
+                      onPressed: _limpiar,
+                      backgroundColor: Colors.orange,
+                      icon: Icons.clear,
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: CustomButton(
+                      label: 'Salir',
+                      onPressed: widget.onCancelar,
+                      backgroundColor: Colors.red,
+                      icon: Icons.close,
+                    ),
+                  ),
+                ],
+              ),
+            ],
           ),
         ],
       ),

@@ -19,8 +19,9 @@ class ControladorChoferes {
         'jueves': 7,
         'viernes': 8,
         'sabado': 6,
-        'domingo': 0,
       },
+      tieneBono: true,
+      horario: 'mañana',
     );
 
     agregarChofer(
@@ -33,8 +34,9 @@ class ControladorChoferes {
         'jueves': 8,
         'viernes': 7,
         'sabado': 5,
-        'domingo': 0,
       },
+      tieneBono: false,
+      horario: 'noche',
     );
 
     agregarChofer(
@@ -47,8 +49,9 @@ class ControladorChoferes {
         'jueves': 8,
         'viernes': 8,
         'sabado': 6,
-        'domingo': 4,
       },
+      tieneBono: true,
+      horario: 'mañana',
     );
 
     agregarChofer(
@@ -61,8 +64,9 @@ class ControladorChoferes {
         'jueves': 7,
         'viernes': 6,
         'sabado': 5,
-        'domingo': 0,
       },
+      tieneBono: true,
+      horario: 'noche',
     );
 
     agregarChofer(
@@ -75,8 +79,9 @@ class ControladorChoferes {
         'jueves': 8,
         'viernes': 8,
         'sabado': 7,
-        'domingo': 2,
       },
+      tieneBono: false,
+      horario: 'mañana',
     );
   }
 
@@ -90,6 +95,8 @@ class ControladorChoferes {
     required String nombre,
     required double sueldoPorHora,
     required Map<String, double> horasPorDia,
+    bool tieneBono = false,
+    String horario = 'mañana',
   }) {
     _choferes.add(
       Chofer(
@@ -97,6 +104,8 @@ class ControladorChoferes {
         nombre: nombre,
         sueldoPorHora: _redondear(sueldoPorHora),
         horasPorDia: Map.from(horasPorDia),
+        tieneBono: tieneBono,
+        horario: horario,
       ),
     );
   }
@@ -106,6 +115,8 @@ class ControladorChoferes {
     required String nombre,
     required double sueldoPorHora,
     required Map<String, double> horasPorDia,
+    bool tieneBono = false,
+    String horario = 'mañana',
   }) {
     final index = _choferes.indexWhere((chofer) => chofer.id == id);
     if (index == -1) {
@@ -115,7 +126,9 @@ class ControladorChoferes {
     _choferes[index]
       ..nombre = nombre
       ..sueldoPorHora = _redondear(sueldoPorHora)
-      ..horasPorDia = Map.from(horasPorDia);
+      ..horasPorDia = Map.from(horasPorDia)
+      ..tieneBono = tieneBono
+      ..horario = horario;
 
     return true;
   }

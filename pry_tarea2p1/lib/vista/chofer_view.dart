@@ -18,12 +18,14 @@ class _ChoferesSelectorViewState extends State<ChoferesSelectorView> {
   final ControladorChoferes _controlador = ControladorChoferes();
   bool _mostrarFormulario = false;
 
-  void _registrarChofer(String nombre, double sueldoPorHora, Map<String, double> horasPorDia) {
+  void _registrarChofer(String nombre, double sueldoPorHora, Map<String, double> horasPorDia, bool tieneBono, String horario) {
     setState(() {
       _controlador.agregarChofer(
         nombre: nombre,
         sueldoPorHora: sueldoPorHora,
         horasPorDia: horasPorDia,
+        tieneBono: tieneBono,
+        horario: horario,
       );
     });
   }
@@ -64,23 +66,17 @@ class _ChoferesSelectorViewState extends State<ChoferesSelectorView> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     FormularioChofer(
-                      onGuardar: (nombre, sueldo, horas) {
-                        _registrarChofer(nombre, sueldo, horas);
+                      onGuardar: (nombre, sueldo, horas, tieneBono, horario) {
+                        _registrarChofer(nombre, sueldo, horas, tieneBono, horario);
                         setState(() {
                           _mostrarFormulario = false;
                         });
                       },
-                    ),
-                    const SizedBox(height: 16),
-                    CustomButton(
-                      label: 'Cancelar',
-                      onPressed: () {
+                      onCancelar: () {
                         setState(() {
                           _mostrarFormulario = false;
                         });
                       },
-                      backgroundColor: Colors.red,
-                      icon: Icons.close,
                     ),
                   ],
                 ),

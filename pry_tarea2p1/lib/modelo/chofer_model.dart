@@ -2,13 +2,17 @@ class Chofer {
   final int id;
   String nombre;
   double sueldoPorHora;
-  Map<String, double> horasPorDia; 
+  Map<String, double> horasPorDia;
+  bool tieneBono;
+  String horario; 
 
   Chofer({
     required this.id,
     required this.nombre,
     required this.sueldoPorHora,
     Map<String, double>? horasPorDia,
+    this.tieneBono = false,
+    this.horario = 'mañana',
   }) : horasPorDia = horasPorDia ?? {
     'lunes': 0,
     'martes': 0,
@@ -16,11 +20,11 @@ class Chofer {
     'jueves': 0,
     'viernes': 0,
     'sabado': 0,
-    'domingo': 0,
   };
 
   double get horasSemanales {
-    return horasPorDia.values.fold(0, (sum, horas) => sum + horas);
+    final keys = ['lunes', 'martes', 'miercoles', 'jueves', 'viernes', 'sabado'];
+    return keys.fold(0.0, (sum, k) => sum + (horasPorDia[k] ?? 0));
   }
 
   double _redondear(double valor) {
